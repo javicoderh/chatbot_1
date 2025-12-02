@@ -1,13 +1,13 @@
 const API_URL = "https://environmental-tedi-dharmacoders-6aad2d67.koyeb.app/chat";
 
-export const sendMessage = async (message) => {
+export const sendMessage = async (message, sessionId) => {
   try {
     const response = await fetch(API_URL, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ message }),
+      body: JSON.stringify({ message, session_id: sessionId }),
     });
 
     if (!response.ok) {
@@ -15,7 +15,7 @@ export const sendMessage = async (message) => {
     }
 
     const data = await response.json();
-    return data.response;
+    return data; // Returns { response: "...", session_id: "..." }
   } catch (error) {
     console.error("Error sending message:", error);
     throw error;

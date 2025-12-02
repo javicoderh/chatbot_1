@@ -10,6 +10,7 @@ function App() {
   ]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [sessionId, setSessionId] = useState(null);
   const messagesEndRef = useRef(null);
 
   const scrollToBottom = () => {
@@ -30,8 +31,11 @@ function App() {
     setIsLoading(true);
 
     try {
-      const response = await sendMessage(userMessage);
-      setMessages(prev => [...prev, { text: response, sender: 'bot' }]);
+      const data = await sendMessage(userMessage, sessionId);
+      setMessages(prev => [...prev, { text: data.response, sender: 'bot' }]);
+      if (data.session_id) {
+        setSessionId(data.session_id);
+      }
     } catch (error) {
       setMessages(prev => [...prev, { text: "Lo siento, hubo un error al conectar con el servidor.", sender: 'bot', error: true }]);
     } finally {
